@@ -7,23 +7,26 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public GameObject notePrefab;
-    public Transform spawnPoint;
-    public float noteSpeed = 5f;
-    public float spawnInterval = 1f;
+    public RectTransform noteContainer;
+    public float noteSpeed = 150f;
+    public float spawnInterval = 1.5f;
     public float hitLineY = 0f;
-    public float hitTolerance = 0.5f;
-    public AudioSource musicSource;
+    public float hitTolerance = 50f;
+
     public Text hitText;
     public GameObject startShowButton;
+    public AudioSource musicSource;
+    public RectTransform hitZone;
 
     private int hitCount = 0;
     private bool musicStarted = false;
+    private List<NoteUI> activeNotes = new List<NoteUI>();
 
     void Start()
     {
         InvokeRepeating(nameof(SpawnNote), 1f, spawnInterval);
-        if (hitText != null) hitText.enabled = false;
-        if (startShowButton != null) startShowButton.SetActive(false);
+        hitText.enabled = false;
+        startShowButton.SetActive(false);
     }
 
     void Update()
@@ -36,8 +39,30 @@ public class GameManager : MonoBehaviour
 
     void SpawnNote()
     {
-        GameObject note = Instantiate(notePrefab, spawnPoint.position, Quaternion.identity);
-        note.GetComponent<Note>().Initialize(noteSpeed, hitLineY, hitTolerance, this);
+        GameObject go = Instantiate(notePrefab, noteContainer);
+        var rect = go.GetComponent<RectTransform>();
+        rect.anchoredPosition = new Vector2(0, 400); // 从上方开始
+        var note = go.GetComponent<NoteUI>();
+        note.Initialize(noteSpeed, hitLineY, hitTolerance, this);
+        activeNotes.Add(note);
+    }
+
+    public void RemoveNote(NoteUI note)
+    {
+        activeNotes.Remove(note);
+    }
+
+    void TryHitNote()
+    {
+        var candidates = activeNotes
+            .Where(n => !n.WasHit && !n.WasMissed)
+            .OrderBy(n => Mathf.Abs(n.GetComponent<RectTransform>().anchoredPosition.y - hitLineY))
+            .ToList();
+
+        if (candidates.Count > 0)
+        {
+            candidates[0].TryHit();
+        }
     }
 
     public void RegisterHit()
@@ -47,29 +72,38 @@ public class GameManager : MonoBehaviour
 
         if (!musicStarted && hitCount >= 6)
         {
-            Debug.Log("达到6次命中，等待玩家点击开始演出");
-            ShowStartButton(); // 只弹出按钮，不播放音乐
+            // 隐藏判定线
+            if (hitZone != null)
+                hitZone.gameObject.SetActive(false);
+
+            // 清除所有 Note
+            foreach (Transform child in noteContainer)
+                Destroy(child.gameObject);
+
+            // 停止生成新 Note
+            CancelInvoke(nameof(SpawnNote));
+
+            ShowStartButton(); // 等待点击
         }
     }
 
     void ShowHitFeedback()
     {
-        if (hitText == null) return;
         hitText.enabled = true;
         CancelInvoke(nameof(HideHitFeedback));
         Invoke(nameof(HideHitFeedback), 0.5f);
     }
+
     void HideHitFeedback()
     {
         hitText.enabled = false;
     }
+
     void ShowStartButton()
     {
-        if (startShowButton != null)
-        {
-            startShowButton.SetActive(true);
-        }
+        startShowButton.SetActive(true);
     }
+
     public void OnStartShowClicked()
     {
         if (startShowButton != null)
@@ -81,26 +115,6 @@ public class GameManager : MonoBehaviour
         {
             musicStarted = true;
             musicSource.Play();
-            Debug.Log("演出开始，音乐播放！");
         }
     }
-    void TryHitNote()
-    {
-        // 找到所有还在场景里、且未命中的 Note
-        var candidates = FindObjectsOfType<Note>()
-            .Where(n => n != null && !n.WasHit && !n.WasMissed) // 用公共属性判断状态
-            .OrderBy(n => Mathf.Abs(n.transform.position.y - hitLineY)) // 距离击打线最近优先
-            .ToList();
-
-        if (candidates.Count == 0)
-        {
-            Debug.Log("没有可命中的 Note");
-            return;
-        }
-
-        // 只尝试命中“最近的那个”
-        var best = candidates[0];
-        best.TryHit();
-    }
-
 }

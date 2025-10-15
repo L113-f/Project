@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Note : MonoBehaviour
+public class NoteUI : MonoBehaviour
 {
     public bool WasHit { get; private set; } = false;
     public bool WasMissed { get; private set; } = false;
@@ -11,7 +12,7 @@ public class Note : MonoBehaviour
     private float hitLineY;
     private float tolerance;
     private GameManager manager;
-    private Renderer rend;
+    private RectTransform rect;
 
     public void Initialize(float speed, float hitLineY, float tolerance, GameManager gm)
     {
@@ -19,34 +20,34 @@ public class Note : MonoBehaviour
         this.hitLineY = hitLineY;
         this.tolerance = tolerance;
         this.manager = gm;
-        rend = GetComponent<Renderer>();
+        rect = GetComponent<RectTransform>();
     }
 
     void Update()
     {
         if (WasHit || WasMissed) return;
 
-        transform.position += Vector3.down * speed * Time.deltaTime;
+        rect.anchoredPosition += Vector2.down * speed * Time.deltaTime;
 
-        // 过击打线较多后自动判为未命中
-        if (transform.position.y < hitLineY - 1f)
+        if (rect.anchoredPosition.y < hitLineY - 100f)
         {
             WasMissed = true;
-            if (rend != null) rend.material.color = Color.gray;
+            manager.RemoveNote(this);
             Destroy(gameObject);
         }
     }
 
     public void TryHit()
     {
-        float dy = Mathf.Abs(transform.position.y - hitLineY);
+        float dy = Mathf.Abs(rect.anchoredPosition.y - hitLineY);
         Debug.Log($"尝试命中！dy = {dy}, tolerance = {tolerance}");
 
         if (dy <= tolerance)
         {
             WasHit = true;
-            if (rend != null) rend.material.color = Color.green;
+            GetComponent<Image>().color = Color.green;
             manager.RegisterHit();
+            manager.RemoveNote(this);
             Destroy(gameObject, 0.1f);
         }
         else
