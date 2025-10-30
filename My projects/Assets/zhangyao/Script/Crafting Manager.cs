@@ -12,29 +12,32 @@ public class CraftingMananger : MonoBehaviour
     public Material unselectedMaterial;
     private Item currentItem;
     public Image customCursor;
-    public slot[] slots; // 3¸öºÏ³É²Û
-    public List<Item> items; // Óëslots¶ÔÓ¦£¬´æ´¢·ÅÈëµÄÎïÆ·
-    public string[] recipes; // Åä·½¸ñÊ½£¬Ã¿¸öÔªËØÎª"ÎïÆ·1,ÎïÆ·2,ÎïÆ·3"
-    public Item[] recipeResults; // ºÏ³É½á¹û£¬ÓërecipesË÷Òı¶ÔÓ¦
-    public slot ResultSlot; // ºÏ³É½á¹û²Û
+    public slot[] slots; // 3ï¿½ï¿½ï¿½Ï³É²ï¿½
+    public List<Item> items; // ï¿½ï¿½slotsï¿½ï¿½Ó¦ï¿½ï¿½ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
+    public string[] recipes; // ï¿½ä·½ï¿½ï¿½Ê½ï¿½ï¿½Ã¿ï¿½ï¿½Ôªï¿½ï¿½Îª"ï¿½ï¿½Æ·1,ï¿½ï¿½Æ·2,ï¿½ï¿½Æ·3"
+    public Item[] recipeResults; // ï¿½Ï³É½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½recipesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦
+    public slot ResultSlot; // ï¿½Ï³É½ï¿½ï¿½ï¿½ï¿½
 
-    public List<Item> availableItems; // ¿É¹©Ñ¡ÔñµÄÎïÆ·ÁĞ±í£¨°´¶şÎ¬Ë³ĞòÅÅÁĞ£©
-    public List<Image> itemImages; // ÎïÆ·¶ÔÓ¦µÄUIÍ¼Æ¬£¨ĞèÓëavailableItemsË³ĞòÒ»ÖÂ£©
-    public int gridRows = 2; // ÎïÆ·Íø¸ñĞĞÊı
-    public int gridCols = 4; // ÎïÆ·Íø¸ñÁĞÊı
-    private int currentRow = 0; // µ±Ç°Ñ¡ÖĞĞĞ
-    private int currentCol = 0; // µ±Ç°Ñ¡ÖĞÁĞ
-    private int nextSlotIndex = 0; // ÏÂÒ»¸öÒª·ÅÈëµÄ²ÛÎ»Ë÷Òı
+    public List<Item> availableItems; // ï¿½É¹ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½Ğ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¬Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½
+    public List<Image> itemImages; // ï¿½ï¿½Æ·ï¿½ï¿½Ó¦ï¿½ï¿½UIÍ¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½availableItemsË³ï¿½ï¿½Ò»ï¿½Â£ï¿½
+    public int gridRows = 2; // ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int gridCols = 4; // ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private int currentRow = 0; // ï¿½ï¿½Ç°Ñ¡ï¿½ï¿½ï¿½ï¿½
+    private int currentCol = 0; // ï¿½ï¿½Ç°Ñ¡ï¿½ï¿½ï¿½ï¿½
+    private int nextSlotIndex = 0; // ï¿½ï¿½Ò»ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ä²ï¿½Î»ï¿½ï¿½ï¿½ï¿½
 
-    public float highlightScale = 1.1f; // Ñ¡ÖĞÊ±µÄËõ·Å±ÈÀı
-    public float normalScale = 1.0f; // Õı³£×´Ì¬µÄËõ·Å±ÈÀı
-    public float highlightBorderWidth = 3f; // Ñ¡ÖĞÊ±µÄ±ß¿ò¿í¶È
-    public float normalBorderWidth = 1f; // Õı³£×´Ì¬µÄ±ß¿ò¿í¶È
-    public Color borderColor = Color.yellow; // ±ß¿òÑÕÉ«
+    public float highlightScale = 1.1f; // Ñ¡ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½
+    public float normalScale = 1.0f; // ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½
+    public float highlightBorderWidth = 3f; // Ñ¡ï¿½ï¿½Ê±ï¿½Ä±ß¿ï¿½ï¿½ï¿½ï¿½
+    public float normalBorderWidth = 1f; // ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä±ß¿ï¿½ï¿½ï¿½ï¿½
+    public Color borderColor = Color.yellow; // ï¿½ß¿ï¿½ï¿½ï¿½É«
    
     public event EventHandler OnCraftSuccess;
     public event EventHandler OnCraftFailure;
+    public GameObject wrong;
+    public GameObject right;
     // private int currentSelectedIndex = 0;
+    
     private void Awake()
     {
         Instance = this;
@@ -55,7 +58,7 @@ public class CraftingMananger : MonoBehaviour
     private void Update()
     {
         HandleKeyboardInput();
-        HandleMouseInput(); //Êó±ê
+        HandleMouseInput(); //ï¿½ï¿½ï¿½
     }
 
     private void EnsureOutlineComponents()
@@ -71,7 +74,7 @@ public class CraftingMananger : MonoBehaviour
         }
     }
 
-    // £¨WASDÑ¡Ôñ£¬EnterÈ·ÈÏ£©
+    // ï¿½ï¿½WASDÑ¡ï¿½ï¿½EnterÈ·ï¿½Ï£ï¿½
     private void HandleKeyboardInput()
     {
         if (availableItems == null || availableItems.Count == 0) return;
@@ -131,7 +134,7 @@ public class CraftingMananger : MonoBehaviour
 
         if (selectedIndex < itemImages.Count && itemImages[selectedIndex] != null)
         {
-            //Ëõ·Å
+            //ï¿½ï¿½ï¿½ï¿½
             itemImages[selectedIndex].rectTransform.localScale = Vector3.one * highlightScale;
 
             Outline selectedOutline = itemImages[selectedIndex].GetComponent<Outline>();
@@ -142,7 +145,7 @@ public class CraftingMananger : MonoBehaviour
         }
     }
 
-    // ½«ÎïÆ··ÅÈë²ÛÎ»
+    // ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½Î»
     private void PlaceItemInSlot(Item selectedItem)
     {
         if (slots.Length == 0) return;
@@ -176,7 +179,7 @@ public class CraftingMananger : MonoBehaviour
         return true;
     }
 
-    // Ô­Êó±êÊäÈë´¦ÀíÂß¼­
+    // Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë´¦ï¿½ï¿½ï¿½ß¼ï¿½
     private void HandleMouseInput()
     {
         if (Input.GetMouseButtonUp(0))
@@ -219,7 +222,7 @@ public class CraftingMananger : MonoBehaviour
 
     public void OnMouseDownItem(Item item)
     {
-        Debug.Log($"¿ªÊ¼ÍÏ×§ÎïÆ·: {item.itemName}");
+        Debug.Log($"ï¿½ï¿½Ê¼ï¿½ï¿½×§ï¿½ï¿½Æ·: {item.itemName}");
 
         if (currentItem == null || currentItem != item)
         {
@@ -269,14 +272,20 @@ public class CraftingMananger : MonoBehaviour
             if (sortedCurrent == sortedRecipe)
             {
                 OnCraftSuccess?.Invoke(this, EventArgs.Empty);
-                Debug.Log($"ºÏ³É³É¹¦! »ñµÃ: {recipeResults[i].itemName}");
+                Debug.Log($"ï¿½Ï³É³É¹ï¿½! ï¿½ï¿½ï¿½: {recipeResults[i].itemName}");
                 GenerateCraftResult(recipeResults[i]);
+               
+                StopAllCoroutines();                    // å¯é€‰ï¼šé˜²æ­¢å¤šæ¬¡è§¦å‘å åŠ 
+                StartCoroutine(ShowThenHide(right, 1f));
+
                 return;
             }
         }
         OnCraftFailure?.Invoke(this, EventArgs.Empty);
+        StopAllCoroutines();                        // å¯é€‰
+        StartCoroutine(ShowThenHide(wrong, 1f));
         ClearResultSlot();
-        Debug.Log("ºÏ³ÉÊ§°Ü! Åä·½²»Æ¥Åä£¨²ÛÎ»±£³Ö²»±ä£©");
+        Debug.Log("ï¿½Ï³ï¿½Ê§ï¿½ï¿½! ï¿½ä·½ï¿½ï¿½Æ¥ï¿½ä£¨ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ö²ï¿½ï¿½ä£©");
         
     }
 
@@ -315,4 +324,14 @@ public class CraftingMananger : MonoBehaviour
             ResultSlot.GetComponent<Image>().sprite = null;
         }
     }
+
+    IEnumerator ShowThenHide(GameObject go, float seconds)
+    {   
+        if (go == null) yield break;
+        go.SetActive(true);
+        yield return new WaitForSeconds(seconds);   // å— Time.timeScale å½±å“
+        go.SetActive(false);
+    }
+
+    
 }
