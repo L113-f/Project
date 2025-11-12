@@ -10,12 +10,14 @@ public class FoodResult : MonoBehaviour
     [SerializeField] private Item success;//展示用
     [SerializeField] private Item failure;
     [SerializeField] private GameObject successParent; 
-    [SerializeField] private GameObject failureParent; 
+    [SerializeField] private GameObject failureParent;
+    [SerializeField]private GameObject backgroundParent;
     [SerializeField] private float animationDuration = 1.5f;
     private void Start()
     {
         successParent?.SetActive(false);
         failureParent?.SetActive(false);
+        backgroundParent?.SetActive(false);
         CraftingMananger.Instance.OnCraftSuccess += Instance_OnCraftSuccess;
         CraftingMananger.Instance.OnCraftFailure += Instance_OnCraftFailure;
     }
@@ -26,6 +28,7 @@ public class FoodResult : MonoBehaviour
         //wrong_Animator.SetTrigger(IS_SHOW);
         //failure.gameObject.SetActive(true);//展示用，后删即可
         failureParent.SetActive(true);
+        backgroundParent?.SetActive(true);
         StartCoroutine(HideParentAfterAnimation(failureParent));
     }
 
@@ -35,6 +38,7 @@ public class FoodResult : MonoBehaviour
         //right_Animator.SetTrigger(IS_SHOW);
         //success.gameObject.SetActive(true);
         successParent.SetActive(true);
+        backgroundParent?.SetActive(true);
         StartCoroutine(HideParentAfterAnimation(successParent));
     }
     private IEnumerator HideParentAfterAnimation(GameObject parent)
@@ -42,6 +46,7 @@ public class FoodResult : MonoBehaviour
         
         yield return new WaitForSeconds(animationDuration);
         parent.SetActive(false);
+        backgroundParent?.SetActive(false);
     }
     private void Update()
     {

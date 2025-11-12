@@ -8,8 +8,8 @@ public class Item : MonoBehaviour
 
     public string itemName;
     //public Sprite itemSprite;
-    [SerializeField]
-    private Image itemImage;
+    [SerializeField]public Image itemImage;
+    [SerializeField]public Image foodImage;
     [SerializeField]private Material selectedMaterial;   
     [SerializeField]private Material unselectedMaterial;
     private bool isSelected;            
