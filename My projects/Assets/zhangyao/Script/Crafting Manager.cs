@@ -21,7 +21,7 @@ public class CraftingMananger : MonoBehaviour
     public List<Item> availableItems; // �ɹ�ѡ�����Ʒ�б�������ά˳�����У�
     public List<Image> itemImages; // ��Ʒ��Ӧ��UIͼƬ������availableItems˳��һ�£�
     public int gridRows = 2; // ��Ʒ��������
-    public int gridCols = 4; // ��Ʒ��������
+    public int gridCols = 5; // ��Ʒ��������
     private int currentRow = 0; // ��ǰѡ����
     private int currentCol = 0; // ��ǰѡ����
     private int nextSlotIndex = 0; // ��һ��Ҫ����Ĳ�λ����
