@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:My projects/Assets/SkySeries Freebie/6sidedCosmicCoolCloud.mat.meta
 guid: f531e09e2ad2fb440b4eed7605863143
 timeCreated: 1533682645
 licenseType: Store
+=======
+guid: a02e649a1f78dd246bbe28f9ab4de7ab
+timeCreated: 1484171803
+licenseType: Pro
+>>>>>>> Stashed changes:My projects/Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset.meta
 NativeFormatImporter:
   userData: 
   assetBundleName: 

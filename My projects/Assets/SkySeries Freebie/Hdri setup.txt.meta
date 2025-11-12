@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:My projects/Assets/SkySeries Freebie/Hdri setup.txt.meta
 guid: add36ebe5ee5af347a876cdf41d00709
 timeCreated: 1509147461
+=======
+guid: bc20776827f8f8943a268d4bc113890c
+timeCreated: 1425440388
+>>>>>>> Stashed changes:My projects/Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt.meta
 licenseType: Store
 TextScriptImporter:
   userData: 
