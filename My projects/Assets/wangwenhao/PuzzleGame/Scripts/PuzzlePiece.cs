@@ -53,7 +53,16 @@ public class PuzzlePiece : MonoBehaviour
         {
             transform.position = targetPosition.position; // 如果接近，则吸附到目标位置
             isComplete = true; // 设置已完成拼图
+
+            // 通知游戏管理器（保持原有逻辑）
             PuzzleMG.instance.Check();
+
+            // 新增：通知拼图组（可选，用于关卡完成检测）
+            PuzzlePieceGroup group = GetComponentInParent<PuzzlePieceGroup>();
+            if (group != null)
+            {
+                group.OnPuzzleComplete();
+            }
         }
     }
 }
