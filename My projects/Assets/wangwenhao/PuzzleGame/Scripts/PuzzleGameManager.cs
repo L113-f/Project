@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PuzzleGameManager : MonoBehaviour
 {
     public static PuzzleGameManager Instance;
+    public GameObject levels;
 
     [Header("摄像机设置")]
     public Camera[] levelCameras; // 每个关卡的摄像机
@@ -351,9 +353,6 @@ public class PuzzleGameManager : MonoBehaviour
                 nextLevelButton.gameObject.SetActive(false);
             }
 
-            // 确保不会执行退出逻辑
-            Debug.Log("退出应用程序");
-            Application.Quit();
         }
     }
 
@@ -362,13 +361,28 @@ public class PuzzleGameManager : MonoBehaviour
     {
         Debug.Log("=== 退出按钮被点击 ===");
 
-#if UNITY_EDITOR
-        Debug.Log("在编辑器中停止运行");
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Debug.Log("退出应用程序");
-        Application.Quit();
-#endif
+        // 添加：关闭所有关卡的可见度
+        TurnOffAllLevelsVisibility();
+
+     
+    }
+
+    // 新增方法：关闭所有关卡的可见度
+    private void TurnOffAllLevelsVisibility()
+    {
+        Debug.Log("正在关闭所有关卡的可见度...");
+
+        levels.SetActive(false);
+      
+
+        // 3. 隐藏UI面板
+        if (levelCompletePanel != null)
+        {
+            levelCompletePanel.SetActive(false);
+            Debug.Log("已隐藏完成面板");
+        }
+
+        Debug.Log("所有关卡可见度已关闭");
     }
 
     void Update()
