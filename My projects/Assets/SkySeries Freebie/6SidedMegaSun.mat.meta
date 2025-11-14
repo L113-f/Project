@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:My projects/Assets/SkySeries Freebie/6SidedMegaSun.mat.meta
 guid: c52c5d7968fa6c9499b0b5752f899bfb
 timeCreated: 1517951682
 licenseType: Store
+=======
+guid: 50bc7790f609a374aba0583d3c760af7
+timeCreated: 1484172856
+licenseType: Pro
+>>>>>>> Stashed changes:My projects/Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Outline.mat.meta
 NativeFormatImporter:
   userData: 
   assetBundleName: 

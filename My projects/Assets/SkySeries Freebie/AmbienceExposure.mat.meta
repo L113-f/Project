@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:My projects/Assets/SkySeries Freebie/AmbienceExposure.mat.meta
 guid: 72deae4d18418f94688abef8e8483df0
 timeCreated: 1512945887
 licenseType: Store
+=======
+guid: c49fc2a253cea644f958e14d2051d716
+timeCreated: 1480316912
+licenseType: Pro
+>>>>>>> Stashed changes:My projects/Assets/TextMesh Pro/Resources/Sprite Assets/EmojiOne.asset.meta
 NativeFormatImporter:
   userData: 
   assetBundleName: 

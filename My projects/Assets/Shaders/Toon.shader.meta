@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:My projects/Assets/Shaders/Toon.shader.meta
 guid: 404e9c1f2f9344e4b9ee9b9c72344d9d
+=======
+guid: 0387a41ce95089040a16c9515bcdc383
+>>>>>>> Stashed changes:My projects/Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader.meta
 ShaderImporter:
   externalObjects: {}
   defaultTextures: []
