@@ -481,7 +481,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 270, y: -93}
+  m_AnchoredPosition: {x: 270, y: 120}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71307770
@@ -571,7 +571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 267, y: 10}
+  m_AnchoredPosition: {x: 267, y: 24}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &75042165
@@ -1714,7 +1714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 267, y: 119.3}
+  m_AnchoredPosition: {x: 267, y: -79}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &518911306
@@ -9882,14 +9882,14 @@ RectTransform:
   m_GameObject: {fileID: 1718908412}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 11.321048, y: 7.927047, z: 1.5025177}
+  m_LocalScale: {x: 13.322609, y: 9.328548, z: 1.7681628}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1071334862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6, y: 59.882843}
+  m_AnchoredPosition: {x: -5.999996, y: -4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1718908416
@@ -9934,14 +9934,14 @@ RectTransform:
   m_GameObject: {fileID: 1744052895}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 12.078412, y: 5.613826, z: 1.6221181}
+  m_LocalScale: {x: 15.166063, y: 9.330308, z: 1.9169755}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1071334862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6, y: 59.882843}
+  m_AnchoredPosition: {x: -6, y: 5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1744052897
@@ -10723,7 +10723,7 @@ PrefabInstance:
     - target: {fileID: 4764556171961074489, guid: 2fc60e085b128104a918397efd909500,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 490
+      value: 491.7
       objectReference: {fileID: 0}
     - target: {fileID: 4764556171961074489, guid: 2fc60e085b128104a918397efd909500,
         type: 3}

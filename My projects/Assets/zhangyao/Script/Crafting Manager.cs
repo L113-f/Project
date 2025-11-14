@@ -43,6 +43,7 @@ public class CraftingMananger : MonoBehaviour
     private HashSet<Item> craftedItems = new HashSet<Item>();
     [SerializeField] private GameObject craftingUI; // 需要隐藏的UI界面
     private bool allItemsCrafted = false;
+    private bool isInputDisabled = false;
     // private int currentSelectedIndex = 0;
     [System.Serializable]
     public struct CheckmarkMapping
@@ -120,7 +121,7 @@ public class CraftingMananger : MonoBehaviour
     private void Update()
     {
         HandleKeyboardInput();
-        HandleMouseInput(); //���
+        //HandleMouseInput(); //���
     }
 
     private void EnsureOutlineComponents()
@@ -139,6 +140,7 @@ public class CraftingMananger : MonoBehaviour
     // ��WASDѡ��Enterȷ�ϣ�
     private void HandleKeyboardInput()
     {
+        if (isInputDisabled) return;
         if (availableItems == null || availableItems.Count == 0) return;
 
         int maxIndex = availableItems.Count - 1;
@@ -234,6 +236,7 @@ public class CraftingMananger : MonoBehaviour
         if (IsAllSlotsFilled())
         {
             CheckCraftingCondition();
+            
         }
 
         nextSlotIndex = (nextSlotIndex + 1) % slots.Length;
@@ -261,7 +264,7 @@ public class CraftingMananger : MonoBehaviour
             }
         }
         // 重置下一个slot索引
-        nextSlotIndex = 0;
+        nextSlotIndex = 2;
     }
     private bool IsAllSlotsFilled()
     {
@@ -449,11 +452,13 @@ public class CraftingMananger : MonoBehaviour
     }
 
     IEnumerator ShowThenHide(GameObject go, float seconds)
-    {   
+    {
         if (go == null) yield break;
+        isInputDisabled = true;
         go.SetActive(true);
         yield return new WaitForSeconds(seconds);   // 受 Time.timeScale 影响
         go.SetActive(false);
+        isInputDisabled = false;
     }
     // 1. 添加隐藏UI的方法
     private void HideCraftingUI()
