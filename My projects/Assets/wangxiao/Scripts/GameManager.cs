@@ -146,9 +146,10 @@ public class GameManager : MonoBehaviour
         RectTransform parent = note.GetComponent<RectTransform>().parent as RectTransform;
         if (parent != null && activeNotes.ContainsKey(parent))
             activeNotes[parent].Remove(note);
+        CheckIfAllNotesCleared();
     }
 
-    // 命中反馈与阶段切换（命中阈值改为 30）
+    // 命中反馈与阶段切换
     public void RegisterHit()
     {
         hitCount++;
@@ -159,37 +160,33 @@ public class GameManager : MonoBehaviour
 
         ShowHitFeedback();
 
-        if (hitCount == 30)
-        {
-            TriggerHitEffect(); // 命中30次时触发特效
-        }
+        // 如果已经开始主音乐，并且总命中达到 30，则关闭主音乐
+        if (musicStarted && hitCount >= 30 && musicSource != null && musicSource.isPlaying)
+            musicSource.Stop();
 
-        // 达到 30 次命中：停止生成、清空球体、隐藏判定线、停止敲击背景音乐、显示按钮
-        if (!musicStarted && hitCount >= 30)
-        {
-            generationStopped = true;
+        CheckIfAllNotesCleared();
+    }
 
+    void CheckIfAllNotesCleared()
+    {
+        if (musicStarted) return; // 如果已经开始演奏就不再弹按钮
+
+        bool allCleared = activeNotes.Values.All(list => list.Count == 0);
+
+        if (allCleared)
+        {
+            // 隐藏判定线
             if (hitZone != null)
                 hitZone.gameObject.SetActive(false);
 
-            foreach (var track in tracks)
-            {
-                foreach (Transform child in track.trackContainer)
-                    Destroy(child.gameObject);
-                activeNotes[track.trackContainer].Clear();
-            }
-
+            // 停止敲击背景音乐
             if (hitBgMusicSource != null && hitBgMusicSource.isPlaying)
                 hitBgMusicSource.Stop();
 
             ShowStartButton();
         }
-
-
-        // 如果已经开始主音乐，并且总命中达到 30，则关闭主音乐
-        if (musicStarted && hitCount >= 30 && musicSource != null && musicSource.isPlaying)
-            musicSource.Stop();
     }
+
 
     void ShowHitFeedback()
     {
@@ -201,17 +198,6 @@ public class GameManager : MonoBehaviour
         Invoke(nameof(HideHitFeedback), 0.5f);
     }
 
-    void TriggerHitEffect()
-    {
-        // 让 hitText 放大一下
-        if (hitText != null)
-        {
-            hitText.text = "30!";
-            hitText.fontSize = 120;
-            hitText.color = Color.yellow;
-            hitText.transform.localScale = Vector3.one * 1.5f;
-        }
-    }
 
     void HideHitFeedback()
     {
