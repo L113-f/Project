@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     // UI 引用
     public Text hitText;
     public GameObject startShowButton;
+    public GameObject endShowButton; // 结束演奏按钮
     public RectTransform hitZone;
 
     // 音频
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
                 TryHitNote(track.trackContainer);
             }
         }
+
     }
 
     // 当前“歌曲时间”：主音乐开始后与音频同步；开始前用场景时间进行预览
@@ -222,6 +224,19 @@ public class GameManager : MonoBehaviour
         {
             musicStarted = true;
             musicSource.Play();
+            //显示“结束演奏”按钮
+            if (endShowButton != null)
+                endShowButton.SetActive(true);
         }
     }
+
+    public void OnEndShowClicked()
+    {
+     #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+     #else
+        Application.Quit();
+     #endif
+    }
+
 }
