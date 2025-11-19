@@ -3,114 +3,87 @@
 public class RotationController : MonoBehaviour
 {
     public ObjectSwitcher objectSwitcher; // 物体切换器（在Inspector中赋值）
-    public float rotationSpeed = 100f;    // 旋转速度
+    public float rotationSpeed = 30f;    // 旋转速度（灵敏度）
+    public Transform pivotObject;         // 旋转中心（必须在Inspector中指定）
 
     private Transform currentTarget;      // 当前旋转目标
     private bool isRotating = false;      // 是否正在旋转
     private Vector3 lastMousePosition;    // 上一帧鼠标位置
-    private Renderer[] targetRenderers;   // 目标物体的所有渲染器（用于计算边界）
 
-    void Update()
+    private void Update()
     {
-        // 自动获取当前激活的物体
-        currentTarget = objectSwitcher?.GetCurrentObject();
-        if (currentTarget == null) return;
+        // 刷新当前目标（始终与切换器保持同步）
+        UpdateCurrentTarget();
 
-        // 初始化渲染器数组（初次加载或切换目标时执行）
-        if (targetRenderers == null || targetRenderers.Length == 0)
+        // 处理鼠标输入
+        HandleMouseInput();
+
+        // 如果正在旋转且目标有效，执行旋转逻辑
+        if (isRotating && currentTarget != null && pivotObject != null)
         {
-            targetRenderers = currentTarget.GetComponentsInChildren<Renderer>();
+            RotateTarget();
         }
+    }
 
-        // 处理旋转开始
-        if (Input.GetMouseButtonDown(0) && IsMouseOverRawImage())
+    // 更新当前需要旋转的目标物体
+    private void UpdateCurrentTarget()
+    {
+        if (objectSwitcher != null)
+        {
+            currentTarget = objectSwitcher.GetCurrentObject();
+        }
+    }
+
+    // 处理鼠标输入（开始/结束旋转）
+    private void HandleMouseInput()
+    {
+        // 鼠标左键按下：开始旋转
+        if (Input.GetMouseButtonDown(0))
         {
             isRotating = true;
             lastMousePosition = Input.mousePosition;
         }
+        // 鼠标左键释放：结束旋转
         else if (Input.GetMouseButtonUp(0))
         {
             isRotating = false;
         }
-
-        // 执行绕中心点的旋转
-        if (isRotating)
-        {
-            Vector3 deltaMouse = Input.mousePosition - lastMousePosition;
-            float rotationX = deltaMouse.y * rotationSpeed * Time.deltaTime;
-            float rotationY = deltaMouse.x * rotationSpeed * Time.deltaTime;
-
-            // 获取自动计算的3D中心点
-            Vector3 pivotPoint = GetAutoCalculatedPivot();
-
-            // 绕中心点旋转的核心逻辑：平移、旋转、再平移
-            RotateAroundPivot(currentTarget, pivotPoint, Vector3.right, -rotationX);
-            RotateAroundPivot(currentTarget, pivotPoint, Vector3.up, rotationY);
-
-            lastMousePosition = Input.mousePosition;
-        }
     }
 
-    /// <summary>
-    /// 自动计算物体的3D中心点（基于所有渲染器的边界）
-    /// </summary>
-    private Vector3 GetAutoCalculatedPivot()
+    // 执行绕 pivotObject 的旋转逻辑
+    private void RotateTarget()
     {
-        // 如果没有渲染器，使用物体自身位置作为 fallback
-        if (targetRenderers == null || targetRenderers.Length == 0)
+        // 获取当前鼠标位置
+        Vector3 currentMousePosition = Input.mousePosition;
+        // 计算鼠标移动差值
+        Vector3 mouseDelta = currentMousePosition - lastMousePosition;
+
+        // 只有鼠标有移动时才执行旋转（避免无效计算）
+        if (mouseDelta.sqrMagnitude > 0.01f)
         {
-            return currentTarget.position;
+            // 水平方向鼠标移动 → 绕 pivot 的 Y 轴旋转（左右旋转）
+            float yRotation = mouseDelta.x * rotationSpeed * Time.deltaTime;
+            // 垂直方向鼠标移动 → 绕 pivot 的 X 轴旋转（上下旋转）
+            float xRotation = -mouseDelta.y * rotationSpeed * Time.deltaTime; // 负号是为了让旋转方向符合直觉
+
+            // 绕 pivot 的 Y 轴旋转（世界空间）
+            currentTarget.RotateAround(pivotObject.position, Vector3.up, yRotation);
+            // 绕 pivot 的 X 轴旋转（世界空间）
+            currentTarget.RotateAround(pivotObject.position, Vector3.right, xRotation);
         }
 
-        // 合并所有渲染器的边界来计算整体中心点
-        Bounds totalBounds = targetRenderers[0].bounds;
-        foreach (Renderer renderer in targetRenderers)
+        // 更新上一帧鼠标位置
+        lastMousePosition = currentMousePosition;
+    }
+
+    // 绘制辅助线（在Scene视图中显示旋转中心与目标的连线，便于调试）
+    private void OnDrawGizmos()
+    {
+        if (pivotObject != null && currentTarget != null)
         {
-            totalBounds.Encapsulate(renderer.bounds);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(pivotObject.position, currentTarget.position); // 连接线
+            Gizmos.DrawWireSphere(pivotObject.position, 0.1f); // 旋转中心标记
         }
-        return totalBounds.center;
-    }
-
-    /// <summary>
-    /// 绕指定中心点旋转物体
-    /// </summary>
-    private void RotateAroundPivot(Transform target, Vector3 pivot, Vector3 axis, float angle)
-    {
-        // 1. 平移物体使中心点位于原点
-        Vector3 offset = target.position - pivot;
-        target.position = pivot;
-
-        // 2. 执行旋转（绕世界坐标系）
-        target.Rotate(axis, angle, Space.World);
-
-        // 3. 平移回原始偏移位置
-        target.position += offset;
-    }
-
-    // 检查鼠标是否在RawImage上方
-    private bool IsMouseOverRawImage()
-    {
-        if (UnityEngine.EventSystems.EventSystem.current == null) return false;
-
-        UnityEngine.EventSystems.PointerEventData pointerData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
-        pointerData.position = Input.mousePosition;
-
-        System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult> results = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
-        UnityEngine.EventSystems.EventSystem.current.RaycastAll(pointerData, results);
-
-        foreach (var result in results)
-        {
-            if (result.gameObject.GetComponent<UnityEngine.UI.RawImage>() != null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // 切换目标物体时重置渲染器数组（确保重新计算中心点）
-    public void OnTargetSwitched()
-    {
-        targetRenderers = null;
     }
 }
